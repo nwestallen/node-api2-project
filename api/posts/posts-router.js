@@ -29,5 +29,21 @@ router.get('/:id', (req, res) => {
       .catch(err => {
           res.status(500).json({ message: "The post information could not be retrieved"});
       });
-})
+});
+
+router.post('/', (req, res) => {
+    const newPost = req.body;
+    if(!newPost.title || !newPost.contents) {
+        res.status(400).json({ message: "Please provide title and contents for the post" });
+    } else {
+        Post.insert(newPost)
+          .then(post => {
+              res.status(201).json(post);
+          })
+          .catch(err => {
+              res.status(500).json({ message: "There was an error while saving the post to the database" });
+          });
+    }
+});
+
 module.exports = router;
